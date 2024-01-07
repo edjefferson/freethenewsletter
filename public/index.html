@@ -6,29 +6,16 @@
   </head>
   <body>
     <div id="container">
-      <div id="main"></div>
+      <div id="main">
+        <div id="menu">
+        </div>
+        <div id="reader">
+          <div id="backblock"><span><</span></div>
+
+          <div id="rbody"></div>
+        </div>
+      </div>
     </div>
-    <script src="he.js"></script>
-    <script>
-      fetch('/return_unread.json').then(response => response.json()).then(data => {
-        data.forEach(email => {
-          const html = email.htmlbody;
-          const parser = new DOMParser();
-          const parsed = parser.parseFromString(html, 'text/html');
-          let div = document.createElement("div");
-          let headerdiv = document.createElement("div");
-          headerdiv.classList.add("nl-header")
-          let bodydiv = document.createElement("div");
-          bodydiv.classList.add("nl-body")
-          let date = new Date(Date.parse(email.date))
-          headerdiv.innerText = email.title + " " + date.toString()
-          bodydiv.innerHTML = parsed.body.innerHTML
-          div.appendChild(headerdiv);
-          div.appendChild(bodydiv);
-          document.getElementById("main").appendChild(div);
-        })
-        
-      })
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
