@@ -1,6 +1,35 @@
 let state = 0
 let letterData
+
 const parser = new DOMParser();
+const urlParams = new URLSearchParams(window.location.search);
+
+const setCookie = (name, value, days = 7, path = '/') => {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString()
+  document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=' + path
+}
+
+const getCookie = (name) => (
+  document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || ''
+)
+
+let api_key
+
+
+if (urlParams.get('key')) {
+	api_key = urlParams.get('key')
+	setCookie('key',api_key,365)
+} else {
+	api_key = getCookie('key')
+}
+	
+if (api_key) {
+	fetch(`/return_unread.json?key=${api_key}`).then(response => response.json()).then(data => {
+		letterData = data
+		populateMenu()
+		
+	})
+}
 
 const populateMenu = () => {
 	letterData.forEach(email => {
@@ -47,8 +76,3 @@ const clickIntoEmail = (e) => {
 
 document.getElementById("backblock").addEventListener("click",clickToMenu)
 
-fetch('/return_unread.json').then(response => response.json()).then(data => {
-	letterData = data
-	populateMenu()
-	
-})

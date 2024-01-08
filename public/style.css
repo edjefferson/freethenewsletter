@@ -68,6 +68,7 @@ img {
 
 #rbody {
   margin-top: 3em;
+  overflow-y: scroll;
 
 }
 @media only screen and (min-width: 600px) {
