@@ -44,7 +44,7 @@ if (urlParams.get('key')) {
 	
 const fetchEmails = () => {
 	fetch(`/return_unread.json?key=${api_key}`).then(response => response.json()).then(data => {
-		localStorage.setItem("letterData", data);
+		localStorage.setItem("letterData", JSON.stringify(data));
 		populateMenu(data)
 	})
 }
@@ -71,7 +71,7 @@ const populateMenu = (data) => {
 	})
 }
 const populateReader = (emailId) => {
-	let email = localStorage.getItem("letterData").filter(l => l.uid == emailId)[0]
+	let email = JSON.parse(localStorage.getItem("letterData")).filter(l => l.uid == emailId)[0]
 	const html = email.htmlbody;
 	const parsed = parser.parseFromString(html, 'text/html');
 	let bodydiv = document.getElementById("rbody")
