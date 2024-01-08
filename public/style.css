@@ -41,6 +41,9 @@ img {
 .nl-header {
   font-weight: bold;
 }
+.nl-header > * {
+  pointer-events: none;
+}
 
 .headerTop  {
   display: flex;

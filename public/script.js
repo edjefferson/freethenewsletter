@@ -106,6 +106,7 @@ const clickToMenu = (e) => {
 	document.getElementById("reader").style.display = "none"
 }
 const clickIntoEmail = (e) => {
+	console.log(e)
 	let emailId = e.target.getAttribute("emailId")
 	populateReader(emailId)
 	document.getElementById("menu").style.display = "none"
