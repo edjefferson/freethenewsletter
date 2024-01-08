@@ -62,8 +62,13 @@ img {
   border: 1px black solid;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   font-size: 3em;
+}
+
+#backblock > span {
+  padding-left: 0.25em;
+  padding-right: 0.25em;
 }
 
 #rbody {

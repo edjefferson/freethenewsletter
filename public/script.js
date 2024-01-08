@@ -27,16 +27,22 @@ if (api_key) {
 	fetch(`/return_unread.json?key=${api_key}`).then(response => response.json()).then(data => {
 		letterData = data
 		populateMenu()
-		
 	})
 }
 
+const fetchEmails = () => {
+	fetch(`/return_unread.json?key=${api_key}`).then(response => response.json()).then(data => {
+		letterData = data
+		populateMenu()
+	})
+}
 const populateMenu = () => {
+	document.getElementById("menu").innerHTML = ""
 	letterData.forEach(email => {
 		
 		let headerdiv = document.createElement("div");
 		let date = new Date(Date.parse(email.date))
-
+		document.getElementById("mark_as_read").setAttribute("emailId",email.uid)
 		headerdiv.classList.add("nl-header")
 		headerdiv.innerText = email.title + " " + date.toString()
 		headerdiv.setAttribute("emailId",email.uid)
@@ -74,5 +80,22 @@ const clickIntoEmail = (e) => {
 	
 }
 
+const markAsRead = (e) => {
+	let emailId = document.getElementById("mark_as_read").getAttribute("emailId")
+	console.log(e)
+	fetch(`/mark_read.json`,{
+		headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+		method: "POST",
+		body: JSON.stringify({key: api_key, emailId: emailId})
+	}).then(response => {
+		fetchEmails()
+		clickToMenu()
+	})
+}
+
 document.getElementById("backblock").addEventListener("click",clickToMenu)
 
+document.getElementById("mark_as_read").addEventListener("click",markAsRead)

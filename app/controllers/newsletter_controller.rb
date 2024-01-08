@@ -41,4 +41,13 @@ class NewsletterController < ApplicationController
     
     
   end
+
+  def mark_read
+    puts params
+    user = User.find_by(api_key: params['key'])
+    email = Email.where(user_id: user.id, uid: params['emailId'])[0]
+    email.read = 1
+    email.save
+    render :json => {"email": email}
+  end
 end
