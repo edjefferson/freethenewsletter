@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyText
+  api_key: MyText
+  last_checked: 2024-01-08 09:35:11
+
+two:
+  name: MyText
+  api_key: MyText
+  last_checked: 2024-01-08 09:35:11
