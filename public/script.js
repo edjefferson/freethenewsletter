@@ -45,7 +45,7 @@ if (urlParams.get('key')) {
 const fetchEmails = () => {
 	fetch(`/return_unread.json?key=${api_key}`).then(response => response.json()).then(data => {
 		localStorage.setItem("localStorage", data);
-		populateMenu()
+		populateMenu(data)
 	})
 }
 
@@ -54,9 +54,9 @@ if (api_key) {
 }
 
 
-const populateMenu = () => {
+const populateMenu = (data) => {
 	document.getElementById("menu").innerHTML = ""
-	localStorage.getItem("letterData").forEach(email => {
+	data.forEach(email => {
 		
 		let headerdiv = document.createElement("div");
 		let date = new Date(Date.parse(email.date))
