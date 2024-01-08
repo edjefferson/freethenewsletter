@@ -1,3 +1,22 @@
+async function registerServiceWorker() {
+	if ("serviceWorker" in navigator) {
+		try {
+			const registration = await navigator.serviceWorker.register(
+				"serviceworker.js"
+			);
+			console.log(
+				"Service Worker registered with scope:",
+				registration.scope
+			);
+		} catch (error) {
+			console.error("Service Worker registration failed:", error);
+		}
+	}
+}
+
+registerServiceWorker();
+console.log("bun")
+
 let state = 0
 let letterData
 
@@ -24,21 +43,18 @@ if (urlParams.get('key')) {
 }
 	
 if (api_key) {
-	fetch(`/return_unread.json?key=${api_key}`).then(response => response.json()).then(data => {
-		letterData = data
-		populateMenu()
-	})
+	fetchEmails()
 }
 
 const fetchEmails = () => {
 	fetch(`/return_unread.json?key=${api_key}`).then(response => response.json()).then(data => {
-		letterData = data
+		localStorage.setItem("localStorage", data);
 		populateMenu()
 	})
 }
 const populateMenu = () => {
 	document.getElementById("menu").innerHTML = ""
-	letterData.forEach(email => {
+	localStorage.getItem("letterData").forEach(email => {
 		
 		let headerdiv = document.createElement("div");
 		let date = new Date(Date.parse(email.date))
@@ -53,7 +69,7 @@ const populateMenu = () => {
 	})
 }
 const populateReader = (emailId) => {
-	let email = letterData.filter(l => l.uid == emailId)[0]
+	let email = localStorage.getItem("letterData").filter(l => l.uid == emailId)[0]
 	const html = email.htmlbody;
 	const parsed = parser.parseFromString(html, 'text/html');
 	let bodydiv = document.getElementById("rbody")
