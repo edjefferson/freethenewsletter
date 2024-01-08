@@ -42,6 +42,25 @@ img {
   font-weight: bold;
 }
 
+.headerTop  {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  padding-bottom: 1em;
+}
+
+.newsletterName {
+  text-transform: uppercase;
+}
+
+.editionName {
+  font-size: 1.5em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 1.5em;
+}
+
 #menu {
   display: flex;
 }

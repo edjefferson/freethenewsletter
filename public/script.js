@@ -62,7 +62,24 @@ const populateMenu = (data) => {
 		let date = new Date(Date.parse(email.date))
 		document.getElementById("mark_as_read").setAttribute("emailId",email.uid)
 		headerdiv.classList.add("nl-header")
-		headerdiv.innerText = email.title + " " + date.toString()
+		let headerTopDiv = document.createElement("div");
+		headerTopDiv.classList.add("headerTop")
+		let newsletterName = document.createElement("div");
+		newsletterName.classList.add("newsletterName")
+		newsletterName.innerText = email.sender
+		let editionDate = document.createElement("div");
+		
+		editionDate.innerText = date.toLocaleString('default', { month: 'long' , day: "numeric"});
+
+		let editionName = document.createElement("div");
+		editionName.classList.add("editionName")
+		editionName.innerText = email.title
+		headerTopDiv.appendChild(newsletterName)
+		headerTopDiv.appendChild(editionDate)
+		headerdiv.appendChild(headerTopDiv)
+		headerdiv.appendChild(editionName)
+		
+
 		headerdiv.setAttribute("emailId",email.uid)
 		headerdiv.addEventListener("click", clickIntoEmail)
 		document.getElementById("menu").appendChild(headerdiv);
