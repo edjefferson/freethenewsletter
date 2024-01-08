@@ -44,7 +44,7 @@ if (urlParams.get('key')) {
 	
 const fetchEmails = () => {
 	fetch(`/return_unread.json?key=${api_key}`).then(response => response.json()).then(data => {
-		localStorage.setItem("localStorage", data);
+		localStorage.setItem("letterData", data);
 		populateMenu(data)
 	})
 }
