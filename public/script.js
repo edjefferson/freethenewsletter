@@ -42,16 +42,18 @@ if (urlParams.get('key')) {
 	api_key = getCookie('key')
 }
 	
-if (api_key) {
-	fetchEmails()
-}
-
 const fetchEmails = () => {
 	fetch(`/return_unread.json?key=${api_key}`).then(response => response.json()).then(data => {
 		localStorage.setItem("localStorage", data);
 		populateMenu()
 	})
 }
+
+if (api_key) {
+	fetchEmails()
+}
+
+
 const populateMenu = () => {
 	document.getElementById("menu").innerHTML = ""
 	localStorage.getItem("letterData").forEach(email => {
