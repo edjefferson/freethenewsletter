@@ -135,13 +135,30 @@ const markAsRead = (e) => {
 	})
 }
 
-const openSettings = () => {
-	document.getElementById("menu").style.display = "none"
-	document.getElementById("reader").style.display = "none"
-	document.getElementById("settings").style.display = "flex"
-	
-	fetch(`/fetch_newsletter_list.json?key=${api_key}`).then(response => response.json()).then(data => {
-		document.getElementById("settingstable").innerHTML = ""
+
+const setNewsletterName = (sender,name) => {
+	fetch(`/update_newsletter_list.json`,{
+		headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+		method: "POST",
+		body: JSON.stringify({key: api_key, sender: sender, name: name})
+	}).then(response => 
+		response.json()
+	).then(data => {
+		refreshSettingsTable(data)
+	})
+}
+
+const submitNewsletterName = (e) => {
+	let name = e.target.parentNode.getElementsByTagName("input")[0].value
+	let sender = e.target.parentNode.parentNode.getElementsByTagName("td")[0].innerText
+	setNewsletterName(sender,name)
+}
+
+const refreshSettingsTable = (data) => {
+	document.getElementById("settingstable").innerHTML = ""
 		data.forEach(newsletter => {
 			let letterRow = document.createElement("tr")
 			let senderCell = document.createElement("td")
@@ -153,6 +170,7 @@ const openSettings = () => {
 				let input = document.createElement("input")
 				let button = document.createElement("button")
 				button.innerText = "."
+				button.addEventListener("click",submitNewsletterName)
 				nameCell.appendChild(input)
 				nameCell.appendChild(button)
 			}
@@ -161,6 +179,14 @@ const openSettings = () => {
 			letterRow.appendChild(nameCell)
 			document.getElementById("settingstable").appendChild(letterRow)
 		})
+}
+const openSettings = () => {
+	document.getElementById("menu").style.display = "none"
+	document.getElementById("reader").style.display = "none"
+	document.getElementById("settings").style.display = "flex"
+	
+	fetch(`/fetch_newsletter_list.json?key=${api_key}`).then(response => response.json()).then(data => {
+		refreshSettingsTable(data)
 	})
 }
 

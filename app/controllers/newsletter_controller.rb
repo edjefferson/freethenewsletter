@@ -13,6 +13,7 @@ class NewsletterController < ApplicationController
   end
 
   def update_newsletter_list
+    Newsletter.where(sender: params['sender']).update(name: params['name'])
     render :json => Newsletter.order(:name)
   end
 
