@@ -30,12 +30,14 @@ class NewsletterController < ApplicationController
       email_record = Email.where(uid: uid, user_id: user.id).first_or_create
       raw_email = imap.uid_fetch(uid, "RFC822").first.attr["RFC822"]
       mail = Mail.read_from_string raw_email
+      body = mail.html_part ? Nokogiri::HTML(encode mail.html_part.body.to_s).css("body") : Nokogiri::HTML(encode mail.body.to_s).css("body")
+      body.xpath('//@style').remove
       sender = Newsletter.where(sender: mail.from[0]).first_or_create
       email_record.update({
         title: mail.subject,
         sender: sender.name ? sender.name : mail.from[0] ,
         date: mail.date,
-        htmlbody: Nokogiri::HTML(encode mail.html_part.body.to_s).css("body").inner_html,
+        htmlbody: body.inner_html ,
         read: 0
       })
     end
