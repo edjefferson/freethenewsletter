@@ -55,12 +55,11 @@ if (api_key) {
 
 
 const populateMenu = (data) => {
-	document.getElementById("menu").innerHTML = ""
+	document.getElementById("menucontents").innerHTML = ""
 	data.forEach(email => {
 		
 		let headerdiv = document.createElement("div");
 		let date = new Date(Date.parse(email.date))
-		document.getElementById("mark_as_read").setAttribute("emailId",email.uid)
 		headerdiv.classList.add("nl-header")
 		let headerTopDiv = document.createElement("div");
 		headerTopDiv.classList.add("headerTop")
@@ -82,9 +81,8 @@ const populateMenu = (data) => {
 
 		headerdiv.setAttribute("emailId",email.uid)
 		headerdiv.addEventListener("click", clickIntoEmail)
-		document.getElementById("menu").appendChild(headerdiv);
+		document.getElementById("menucontents").appendChild(headerdiv);
 
-		
 	})
 }
 const populateReader = (emailId) => {
@@ -93,6 +91,8 @@ const populateReader = (emailId) => {
 	const parsed = parser.parseFromString(html, 'text/html');
 	let bodydiv = document.getElementById("rbody")
 	let tempDiv = document.createElement("div")
+	document.getElementById("mark_as_read").setAttribute("emailId",emailId)
+
 	tempDiv.innerHTML = parsed.body.innerHTML
 	if (tempDiv.getElementsByTagName("*")) {
 		Array.from(tempDiv.getElementsByTagName("*")).forEach(n => {
@@ -104,6 +104,8 @@ const populateReader = (emailId) => {
 const clickToMenu = (e) => {
 	document.getElementById("menu").style.display = "flex"
 	document.getElementById("reader").style.display = "none"
+	document.getElementById("settings").style.display = "none"
+
 }
 const clickIntoEmail = (e) => {
 	console.log(e)
@@ -111,7 +113,8 @@ const clickIntoEmail = (e) => {
 	populateReader(emailId)
 	document.getElementById("menu").style.display = "none"
 	document.getElementById("reader").style.display = "flex"
-	
+	document.getElementById("settings").style.display = "none"
+
 	
 	
 }
@@ -125,13 +128,45 @@ const markAsRead = (e) => {
       'Content-Type': 'application/json'
     },
 		method: "POST",
-		body: JSON.stringify({key: api_key, emailId: emailId})
+		body: JSON.stringify({key: api_key, emailId: emailId, read: 1})
 	}).then(response => {
 		fetchEmails()
 		clickToMenu()
 	})
 }
 
-document.getElementById("backblock").addEventListener("click",clickToMenu)
+const openSettings = () => {
+	document.getElementById("menu").style.display = "none"
+	document.getElementById("reader").style.display = "none"
+	document.getElementById("settings").style.display = "flex"
+	
+	fetch(`/fetch_newsletter_list.json?key=${api_key}`).then(response => response.json()).then(data => {
+		document.getElementById("settingstable").innerHTML = ""
+		data.forEach(newsletter => {
+			let letterRow = document.createElement("tr")
+			let senderCell = document.createElement("td")
+			senderCell.innerHTML = newsletter.sender
+			let nameCell = document.createElement("td")
+			if (newsletter.name) {
+				nameCell.innerHTML = newsletter.name
+			} else {
+				let input = document.createElement("input")
+				let button = document.createElement("button")
+				button.innerText = "."
+				nameCell.appendChild(input)
+				nameCell.appendChild(button)
+			}
+			
+			letterRow.appendChild(senderCell)
+			letterRow.appendChild(nameCell)
+			document.getElementById("settingstable").appendChild(letterRow)
+		})
+	})
+}
+
+document.getElementsByClassName("backbutton")[0].addEventListener("click",clickToMenu)
+document.getElementsByClassName("backbutton")[1].addEventListener("click",clickToMenu)
 
 document.getElementById("mark_as_read").addEventListener("click",markAsRead)
+
+document.getElementById("settingsbutton").addEventListener("click",openSettings)

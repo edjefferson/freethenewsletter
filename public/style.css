@@ -24,19 +24,20 @@ body {
   height: 100%;
 }
 
-#menu {
+#menucontents {
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
 }
 
-#menu > div {
+#menucontents > div {
   padding: 0.5em;
   height: 5em;
   border: 1px black solid;
   border-bottom: 0;
 }
 
-#menu > div:last-of-type {
+#menucontents > div:last-of-type {
   border-bottom: 1px black solid;
 }
 img {
@@ -47,6 +48,10 @@ img {
 }
 .nl-header > * {
   pointer-events: none;
+}
+
+#mark_as_read {
+  pointer-events: initial;
 }
 
 .headerTop  {
@@ -70,13 +75,25 @@ img {
 
 #menu {
   display: flex;
+  flex-direction: column;
+  height: 100%;
 }
-
+#menutop {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
 #reader {
   display:none;
   flex-direction: column;
   height: 100%;
   position: relative;
+}
+
+#settings {
+  display: none;
+  flex-direction: column;
+  height: 100%;
 }
 
 #backblock {
@@ -99,6 +116,8 @@ img {
 #rbody {
   margin-top: 3em;
   overflow-y: scroll;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
 
 }
 @media only screen and (min-width: 600px) {

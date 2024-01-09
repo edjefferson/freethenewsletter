@@ -8,6 +8,14 @@ class NewsletterController < ApplicationController
     encoded
   end
 
+  def fetch_newsletter_list
+    render :json => Newsletter.order(:name)
+  end
+
+  def update_newsletter_list
+    render :json => Newsletter.order(:name)
+  end
+
   def return_unread
     check_email
     user_id = User.find_by(api_key: params[:key]).id
@@ -38,7 +46,7 @@ class NewsletterController < ApplicationController
         sender: sender.name ? sender.name : mail.from[0] ,
         date: mail.date,
         htmlbody: body.inner_html ,
-        read: 0
+        read: email_record.read ? email_record.read : 0
       })
     end
     
@@ -46,10 +54,10 @@ class NewsletterController < ApplicationController
   end
 
   def mark_read
-    puts params
+
     user = User.find_by(api_key: params['key'])
     email = Email.where(user_id: user.id, uid: params['emailId'])[0]
-    email.read = 1
+    email.read = params['read']
     email.save
     render :json => {"email": email}
   end
